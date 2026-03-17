@@ -2,6 +2,6 @@
 
 ## Integrantes:
 * Juan Pablo Escamilla - 2420580
-* Erick Andrey Obando - 
+* Erick Andrey Obando - 2415751
 * Steven Angulo Nieves - 
 * Camilo Portilla Ortega -

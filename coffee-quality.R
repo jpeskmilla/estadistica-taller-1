@@ -2,7 +2,10 @@
 # PARTE 1 - Carga, limpieza y estadísticas de resumen
 # Taller Análisis Descriptivo - Coffee Quality
 # ============================================================
-
+install.packages("dplyr")
+install.packages("moments")
+install.packages("e1071")
+install.packages("corrplot")
 # --- 1. Cargar librerías necesarias ---
 library(dplyr)
 library(ggplot2)

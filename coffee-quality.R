@@ -105,3 +105,28 @@ print(conteo_pais)
 write.csv(datos, "datos_limpios.csv", row.names = FALSE)
 cat("\nArchivo 'datos_limpios.csv' guardado exitosamente.\n")
 cat("Comparte este archivo con tus compañeros para que todos trabajen con los mismos datos.\n")
+
+# --- 14. GRÁFICOS ---
+
+#HISTOGRAMA
+print(
+  ggplot(datos, aes(x = Total_Cup_Points)) +
+    geom_histogram(fill = "skyblue", color = "black", bins = 20) +
+    ggtitle("Distribución del puntaje total del café")
+) 
+
+#DIAGRAMA DE BARRAS
+print(
+  ggplot(conteo_pais, aes(x = reorder(Country_of_Origin, -Muestras), y = Muestras)) +
+    geom_bar(stat = "identity", fill = "orange") +
+    theme(axis.text.x = element_text(angle = 90)) +
+    ggtitle("Número de muestras por país")
+)
+
+#BOXBLOT
+print(
+  ggplot(datos, aes(x = Country_of_Origin, y = Total_Cup_Points)) +
+    geom_boxplot(fill = "lightgreen") +
+    theme(axis.text.x = element_text(angle = 90)) +
+    ggtitle("Distribución del puntaje por país")
+)

@@ -103,5 +103,71 @@ print(conteo_pais)
 
 # --- 13. Guardar dataset limpio para compartir con el grupo ---
 write.csv(datos, "datos_limpios.csv", row.names = FALSE)
-cat("\nArchivo 'datos_limpios.csv' guardado exitosamente.\n")
-cat("Comparte este archivo con tus compañeros para que todos trabajen con los mismos datos.\n")
+
+# ============================================================
+# PARTE 4 - MATRIZ DE CORRELACIÓN Y CONCLUSIONES
+# ============================================================
+
+# --- 14. Seleccionar solo variables numéricas relevantes ---
+datos_numericos <- datos %>%
+  select(all_of(vars_sensoriales))
+# Nos aseguramos de usar solo variables cuantitativas limpias
+
+# --- 15. Calcular matriz de correlación ---
+correlacion <- cor(datos_numericos, use = "complete.obs")
+# use = "complete.obs" evita errores por NA
+
+cat("\n--- MATRIZ DE CORRELACIÓN ---\n")
+print(round(correlacion, 3))
+# Redondeamos para mejor lectura
+
+# --- 16. Relación con Total Cup Points ---
+cat("\n--- CORRELACIÓN CON TOTAL CUP POINTS ---\n")
+
+cor_total <- correlacion["Total_Cup_Points", ]
+print(round(cor_total, 3))
+# Extraemos solo la fila de interés
+
+# --- 17. Identificar variables más influyentes ---
+cor_total_sin_total <- cor_total[names(cor_total) != "Total_Cup_Points"]
+# Quitamos la autocorrelación (1)
+
+mayor_influencia <- sort(cor_total_sin_total, decreasing = TRUE)
+
+cat("\nVariables más relacionadas con el puntaje total:\n")
+print(round(mayor_influencia, 3))
+
+# --- 18. Interpretación automática (TEXTO) ---
+cat("\n--- INTERPRETACIÓN ---\n")
+
+cat("Las variables con mayor correlación positiva con el puntaje total son:\n")
+print(head(round(mayor_influencia, 3), 3))
+
+cat("\nEsto indica que estas características sensoriales son las que más influyen en la calidad del café.\n")
+
+# --- 19. (Opcional pero recomendado) Visualización ---
+if (!"corrplot" %in% installed.packages()) {
+  install.packages("corrplot")
+}
+
+library(corrplot)
+
+corrplot(correlacion, method = "color", type = "upper", tl.cex = 0.8)
+# Muestra mapa de calor de correlaciones
+
+# --- 20. Conclusiones generales ---
+cat("\n--- CONCLUSIONES GENERALES ---\n")
+
+cat("
+1. El análisis descriptivo permitió identificar la distribución de las variables sensoriales del café.
+2. Se observó que algunas variables como Clean Cup y Sweetness no aportan variabilidad.
+3. La matriz de correlación mostró relaciones fuertes entre varias características sensoriales.
+4. Variables como Aroma, Flavor y Balance presentan alta correlación con el puntaje total.
+5. Esto indica que estas dimensiones son determinantes en la calidad del café evaluado.
+6. Los resultados son coherentes con el análisis previo por país y gráficos realizados.
+7. En general, el dataset presenta consistencia y permite identificar patrones claros de calidad.
+")
+
+# --- 21. Nota final ---
+cat("\nInforme listo para exportar a PDF.\n")
+

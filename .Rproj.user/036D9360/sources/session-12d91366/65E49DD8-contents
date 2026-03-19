@@ -1,0 +1,32 @@
+# 1. Cargar las librerías
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# 2. Leer los datos
+df <- read.csv("datos.csv", check.names = FALSE)
+
+# --- BOXPLOT 1: VARIABLES SENSORIALES ---
+# Esto sirve para comparar Aroma vs Sabor vs Acidez, etc.
+df_sensorial <- df %>% 
+  select(Aroma, Flavor, Aftertaste, Acidity, Body, Balance) %>%
+  pivot_longer(cols = everything(), names_to = "Atributo", values_to = "Puntaje")
+
+ggplot(df_sensorial, aes(x = Atributo, y = Puntaje, fill = Atributo)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red") +
+  theme_minimal() +
+  labs(title = "Distribución de Atributos Sensoriales del Café",
+       y = "Escala de Puntaje", x = "Atributos")
+
+# --- BOXPLOT 2: ANÁLISIS POR PAÍS (PUNTAJE TOTAL) ---
+# Ordenamos los países por su mediana para que el gráfico sea profesional
+ggplot(df, aes(x = reorder(Country_of_Origin, Total_Cup_Points, FUN = median), 
+               y = Total_Cup_Points, fill = Country_of_Origin)) +
+  geom_boxplot() +
+  coord_flip() + # Volteamos el gráfico para leer bien los nombres de los países
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(title = "Comparativa de Puntaje Total por País",
+       x = "País de Origen", y = "Total Cup Points")
+
+

@@ -1,0 +1,26 @@
+{
+    "id": "E1DBC61B",
+    "path": "~/estadistica-taller-1/coffee-quality.R",
+    "project_path": "coffee-quality.R",
+    "type": "r_source",
+    "hash": "4094321901",
+    "contents": "",
+    "dirty": false,
+    "created": 1773877362729.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "109,18",
+        "scrollLine": "85"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1773881114,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1773881114738,
+    "read_only": false,
+    "read_only_alternatives": []
+}

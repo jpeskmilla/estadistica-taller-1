@@ -107,45 +107,26 @@ write.csv(datos, "datos_limpios.csv", row.names = FALSE)
 cat("\nArchivo 'datos_limpios.csv' guardado exitosamente.\n")
 cat("Comparte este archivo con tus compañeros para que todos trabajen con los mismos datos.\n")
 
-# --- 14. GRÁFICOS ---
+# --- BOXPLOTS ---
+# --- BOXPLOT 1: VARIABLES SENSORIALES ---
+# Esto sirve para comparar Aroma vs Sabor vs Acidez, etc.
+df_sensorial <- df %>% 
+  select(Aroma, Flavor, Aftertaste, Acidity, Body, Balance) %>%
+  pivot_longer(cols = everything(), names_to = "Atributo", values_to = "Puntaje")
 
-#HISTOGRAMA
-print(
-  ggplot(datos, aes(x = Total_Cup_Points)) +
-    geom_histogram(fill = "skyblue", color = "black", bins = 20) +
-    ggtitle("Distribución del puntaje total del café")
-) 
+ggplot(df_sensorial, aes(x = Atributo, y = Puntaje, fill = Atributo)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red") +
+  theme_minimal() +
+  labs(title = "Distribución de Atributos Sensoriales del Café",
+       y = "Escala de Puntaje", x = "Atributos")
 
-#DIAGRAMA DE BARRAS
-print(
-  ggplot(conteo_pais, aes(x = reorder(Country_of_Origin, -Muestras), y = Muestras)) +
-    geom_bar(stat = "identity", fill = "orange") +
-    theme(axis.text.x = element_text(angle = 90)) +
-    ggtitle("Número de muestras por país")
-)
-
-#BOXBLOT
-print(
-  ggplot(datos, aes(x = Country_of_Origin, y = Total_Cup_Points)) +
-    geom_boxplot(fill = "lightgreen") +
-    theme(axis.text.x = element_text(angle = 90)) +
-    ggtitle("Distribución del puntaje por país")
-)
-
-#DIAGRAMA DE TORTA
-color_count <- datos %>%
-  filter(!is.na(Color)) %>%
-  count(Color)
-
-p <- ggplot(color_count, aes(x = factor(1), y = n, fill = Color)) +
-  geom_bar(stat = "identity") +
-  coord_polar("y")
-
-print(p)
-
-#MATRIZ DE CORRELACION
-library(corrplot)
-
-correlacion <- cor(datos[, vars_sensoriales], use = "complete.obs")
-
-corrplot(correlacion, method = "color", type = "upper")
+# --- BOXPLOT 2: ANÁLISIS POR PAÍS (PUNTAJE TOTAL) ---
+# Ordenamos los países por su mediana para que el gráfico sea profesional
+ggplot(df, aes(x = reorder(Country_of_Origin, Total_Cup_Points, FUN = median), 
+               y = Total_Cup_Points, fill = Country_of_Origin)) +
+  geom_boxplot() +
+  coord_flip() + # Volteamos el gráfico para leer bien los nombres de los países
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(title = "Comparativa de Puntaje Total por País",
+       x = "País de Origen", y = "Total Cup Points")

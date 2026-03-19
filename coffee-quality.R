@@ -130,3 +130,21 @@ print(
     theme(axis.text.x = element_text(angle = 90)) +
     ggtitle("Distribución del puntaje por país")
 )
+
+#DIAGRAMA DE TORTA
+color_count <- datos %>%
+  filter(!is.na(Color)) %>%
+  count(Color)
+
+p <- ggplot(color_count, aes(x = factor(1), y = n, fill = Color)) +
+  geom_bar(stat = "identity") +
+  coord_polar("y")
+
+print(p)
+
+#MATRIZ DE CORRELACION
+library(corrplot)
+
+correlacion <- cor(datos[, vars_sensoriales], use = "complete.obs")
+
+corrplot(correlacion, method = "color", type = "upper")
